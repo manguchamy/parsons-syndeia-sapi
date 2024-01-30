@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>8017737c-da37-4fcc-bdae-79ef1adac1b2</groupId>
+	<artifactId>api-error-handler</artifactId>
+	<version>6.1.0</version>
+	<packaging>mule-extension</packaging>
+
+	<name>API Error Handler</name>
+	<description>Provides standard REST API error responses</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<!-- XML SDK properties -->
+		<mule.version>4.3.0</mule.version>
+		<mule.extensions.maven.plugin.version>1.4.1</mule.extensions.maven.plugin.version>
+		<app.runtime>4.3.0</app.runtime>
+	</properties>
+
+	<distributionManagement>
+		<repository>
+			<id>Exchange2</id>
+			<name>Mule Repo</name>
+			<url>https://maven.anypoint.mulesoft.com/api/v1/organizations/${project.groupId}/maven</url>
+			<layout>default</layout>
+		</repository>
+	</distributionManagement>
+
+	<dependencies>
+		<!--Needed to discover the 'xml-based' XmlExtensionLoader for smart connectors -->
+		<dependency>
+			<groupId>org.mule.runtime</groupId>
+			<artifactId>mule-module-extensions-xml-support</artifactId>
+			<version>${mule.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- DataWeave -->
+		<dependency>
+			<groupId>com.mulesoft.mule.runtime.modules</groupId>
+			<artifactId>mule-module-spring-config-ee</artifactId>
+			<version>${mule.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<!-- Build plugin for XML SDK extension -->
+				<groupId>org.mule.runtime.plugins</groupId>
+				<artifactId>mule-extensions-maven-plugin</artifactId>
+				<version>${mule.extensions.maven.plugin.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>mulesoft-releases</id>
+			<name>MuleSoft Releases Repository</name>
+			<url>https://repository.mulesoft.org/releases/</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>mulesoft-snapshots</id>
+			<name>MuleSoft Snapshots Repository</name>
+			<url>https://repository.mulesoft.org/snapshots/</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>anypoint-exchange-v3</id>
+			<name>Anypoint Exchange V3</name>
+			<url>https://maven.anypoint.mulesoft.com/api/v3/maven</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>mulesoft-releases</id>
+			<name>MuleSoft Releases Repository</name>
+			<url>https://repository.mulesoft.org/releases/</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>releases-ee</id>
+			<name>Mule Release Repository</name>
+			<url>https://repository.mulesoft.org/nexus/content/repositories/releases-ee/</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>

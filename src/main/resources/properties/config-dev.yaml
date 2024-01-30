@@ -1,0 +1,18 @@
+syndeia:
+  host: "10.63.4.60"
+  port: "9443"
+  basepath: "/external/twcloud/REPO5"
+  artifacts-path: "/artifacts"
+  user-id: "Administrator"
+  auth-token: "Administrator"
+  container-externalKey: "7f262fb6-64ea-4dfb-b3c6-65c673331f10"
+  type-externalKey: "Element"
+  other-elementIds: "ee7483bb-87a7-456f-96ca-583aab54f879,
+    c9863dc5-724d-49d1-95a1-920a04ea476a,
+    62247b93-dde4-40e7-93a2-b05bcc74faa1,
+    22f1ea07-4aa4-4646-88fd-0c6041a1be28,
+    e001693e-5698-4a0c-b986-d64933b6b9aa,
+    d93405de-8825-4833-9e09-e87240343949,
+    1cbe2cf4-ca4a-48f3-bce0-a5a32f6ca4cc,
+    7c31cc45-06d8-4f28-823d-f2ae5103caa8"
+  

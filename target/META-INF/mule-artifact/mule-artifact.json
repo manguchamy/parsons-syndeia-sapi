@@ -1,0 +1,33 @@
+{
+  "configs": [
+    "global-config.xml",
+    "error-config.xml",
+    "parsons-syndeia-sapi.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "8017737c-da37-4fcc-bdae-79ef1adac1b2:parsons-syndeia-sapi:1.0.7",
+  "minMuleVersion": "4.4.0",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedPackages": [],
+      "exportedResources": [
+        "log4j2.xml",
+        "ssl/mulesoftkeystore.jks",
+        "ssl/truststore.jks",
+        "global-config.xml",
+        "application-types.xml",
+        "parsons-syndeia-sapi.xml",
+        "properties/common-config.yaml",
+        "properties/config-dev.yaml",
+        "error-config.xml"
+      ]
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}

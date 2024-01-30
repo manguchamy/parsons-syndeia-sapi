@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+	xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:module-error-handler-plugin="http://www.mulesoft.org/schema/mule/module-error-handler-plugin"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/module-error-handler-plugin http://www.mulesoft.org/schema/mule/module-error-handler-plugin/current/mule-module-error-handler-plugin.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
+	<error-handler name="global-error-configError_Handler"
+		doc:id="4e14e8e5-caf0-42c9-9665-e8d73167b78d">
+		<on-error-continue enableNotifications="true"
+			logException="true" doc:name="On Error Continue"
+			doc:id="38c3e4f7-585e-4c6c-9de2-c402ea94c567" type="ANY">
+			<module-error-handler-plugin:process-error
+				doc:name="Process Error"
+				doc:id="b112fbdc-d0cb-493f-904e-7fb7561bacfc">
+				<module-error-handler-plugin:custom-errors><![CDATA[#[%dw 2.0
+output application/java
+---
+{
+    "MULE:EXPRESSION": {
+        "errorCode": 500,
+        "reason": "UNKNOWN",
+        "defaultError": error.description,
+        "errorType": "MULE:EXPRESSION"
+    },
+    "UNKNOWN": {
+        "errorCode": 500,
+        "reason": "UNKNOWN",
+        "defaultError": error.description ,
+        "errorType": "MULE:EXPRESSION"
+    },
+    "VALIDATION:INVALID_BOOLEAN": {
+        "errorCode": 500,
+        "reason": "UNKNOWN",
+        "defaultError": error.description, // read error from the application
+        "errorType": "MULE:EXPRESSION"
+    }
+}]]]></module-error-handler-plugin:custom-errors>
+			</module-error-handler-plugin:process-error>
+			<set-variable value="#[attributes.httpStatus]"
+				doc:name="Set HTTP Status Code"
+				doc:id="58924223-458e-44c4-bf87-6c924a329c71"
+				variableName="httpStatus" />
+			<ee:transform doc:name="Transform Message"
+				doc:id="2557c3ab-1a96-4bbc-a025-6e851a288f2a">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json 
+--- 
+{ 
+	code: attributes.httpStatus, 
+	message: attributes.errorLog
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<json-logger:logger doc:name="Logger"
+				doc:id="833f0bad-0540-4fec-a0cd-2bf5006cfb85"
+				config-ref="JSON_Logger_Config" priority="ERROR"
+				message="Log Error Message" />
+		</on-error-continue>
+	</error-handler>
+</mule>

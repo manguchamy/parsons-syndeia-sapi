@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:sharepoint="http://www.mulesoft.org/schema/mule/sharepoint"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/sharepoint http://www.mulesoft.org/schema/mule/sharepoint/current/mule-sharepoint.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+
+	<configuration-properties
+		doc:name="Configuration properties"
+		doc:id="0b79ecf5-4835-4047-9597-0f4949b8091e"
+		file="properties\common-config.yaml" />
+
+	<http:listener-config name="HTTP_Listener_config"
+		doc:name="HTTP Listener config"
+		doc:id="8f7a8e4d-6337-4258-ad2b-28b84457bb25">
+		<http:listener-connection host="0.0.0.0"
+			port="8081" />
+	</http:listener-config>
+	<global-property doc:name="Global Property"
+		doc:id="6bb7f644-e62d-4a53-a9d5-57a9160a51fa" name="mule.env"
+		value="dev" />
+	<configuration-properties
+		doc:name="Configuration properties"
+		doc:id="aa87a126-3785-4cbf-b6ed-2c933da46e95"
+		file="properties\config-${mule.env}.yaml" />
+	<json-logger:config name="JSON_Logger_Config"
+		doc:name="JSON Logger Config"
+		doc:id="e2994f1f-ab1e-431f-a6aa-9b5bfe3b8075"
+		environment="${mule.env}"
+		applicationName="${json-logger.application.name}"
+		applicationVersion="${json-logger.application.version}" />
+	<configuration doc:name="Configuration"
+		doc:id="38d10501-6434-4719-8d69-e93d9a3aacdf"
+		defaultErrorHandler-ref="global-error-configError_Handler" />
+	<http:request-config
+		name="HTTP_Request_configuration"
+		doc:name="HTTP Request configuration"
+		doc:id="9fc6384b-c08f-4047-b7ce-c29df957004e"
+		basePath="${syndeia.basepath}">
+		<http:request-connection protocol="HTTPS"
+			host="${syndeia.host}" port="${syndeia.port}"
+			tlsContext="TLS_Context">
+			<reconnection>
+				<reconnect count="3" />
+			</reconnection>
+		</http:request-connection>
+		<http:default-headers>
+			<http:default-header key="User-Id"
+				value="${syndeia.user-id}" />
+			<http:default-header key="Ext-Auth-Token"
+				value="${syndeia.auth-token}" />
+		</http:default-headers>
+	</http:request-config>
+	<tls:context name="TLS_Context" doc:name="TLS Context"
+		doc:id="b42aad82-6e54-4776-8125-8e941b6ef826">
+		<tls:trust-store path="ssl/truststore.jks"
+			password="abc123" type="jks" insecure="true" />
+	</tls:context>
+
+</mule>

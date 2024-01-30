@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:module-error-handler-plugin="http://www.mulesoft.org/schema/mule/module-error-handler-plugin"
+	xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/module-error-handler-plugin http://www.mulesoft.org/schema/mule/module-error-handler-plugin/current/mule-module-error-handler-plugin.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="parsons-syndeia-sapiFlow" doc:id="f215b1c4-ad68-41d5-ba80-427e16a3270f" >
+		<http:listener doc:name="Listener" doc:id="431e39fb-1c5f-4ded-b9d7-1d22093fd590" config-ref="HTTP_Listener_config" path="/test-syndeia" allowedMethods="GET"/>
+		<ee:transform doc:name="Transform Message" doc:id="9243c214-a8c7-479c-8460-d3484f7a80ce" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[output application/java
+---
+{
+	"container.externalKey" : p('syndeia.container-externalKey'),
+	"type.externalKey" : p('syndeia.type-externalKey'),
+	"other.elementIds": p('syndeia.other-elementIds')
+	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<json-logger:logger doc:name="Logger" doc:id="9f6ef96c-5023-41b3-8777-3ff7c77a5d50" config-ref="JSON_Logger_Config" message="Query Params fpr Syndeia Call" tracePoint="BEFORE_REQUEST"/>
+		<http:request method="GET" doc:name="Request" doc:id="49b45a13-61fb-4242-afc6-c1804fa9a108" path="${syndeia.artifacts-path}" config-ref="HTTP_Request_configuration">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"container.externalKey" : "7f262fb6-64ea-4dfb-b3c6-65c673331f10",
+	"type.externalKey" : "Element",
+	"other.elementIds" : "ee7483bb-87a7-456f-96ca-583aab54f879, 
+		c9863dc5-724d-49d1-95a1-920a04ea476a, 
+		62247b93-dde4-40e7-93a2-b05bcc74faa1, 
+		22f1ea07-4aa4-4646-88fd-0c6041a1be28, 
+		e001693e-5698-4a0c-b986-d64933b6b9aa, 
+		d93405de-8825-4833-9e09-e87240343949, 
+		1cbe2cf4-ca4a-48f3-bce0-a5a32f6ca4cc, 
+		7c31cc45-06d8-4f28-823d-f2ae5103caa8"
+}]]]></http:query-params>
+		</http:request>
+		<json-logger:logger doc:name="Logger" doc:id="6f0a5f06-58f0-4d6b-8363-69a997dda4be" config-ref="JSON_Logger_Config" message="Syndeia Response for Test Call" tracePoint="AFTER_REQUEST"/>
+		<ee:transform doc:name="Transform Message" doc:id="1cd68aab-3f4c-4d95-8c11-62f4a9a60b2d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
